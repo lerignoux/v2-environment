@@ -9,11 +9,11 @@ services:
     ports:
       - 80:80
       - 443:443
-      - 1080:1080
-      - 1443-1448:1443-1448
+      - 10080:1080
+      - 10443-10448:10443-10448
     volumes:
       - ./v2/server.json:/etc/v2ray/config.json
-      - ./nginx/nginx.json:/etc/nginx/nginx.conf:ro
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
       - ./static:/var/www:ro
       - ./certificates:/etc/certificates:ro
       - ./dhparam.pem:/etc/ssl/dhparam.pem
