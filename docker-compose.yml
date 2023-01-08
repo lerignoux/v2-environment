@@ -1,0 +1,34 @@
+version: "3.7"
+
+services:
+  v2-nginx:
+    container_name: v2ray-lerignoux-nginx
+    image: nginx
+    networks:
+      - v2ray
+    ports:
+      - 80:80
+      - 443:443
+      - 1080:1080
+      - 1443-1448:1443-1448
+    volumes:
+      - ./v2/server.json:/etc/v2ray/config.json
+      - ./nginx/nginx.json:/etc/nginx/nginx.conf:ro
+      - ./static:/var/www:ro
+      - ./certificates:/etc/certificates:ro
+      - ./dhparam.pem:/etc/ssl/dhparam.pem
+    restart: always
+    links:
+      - v2-server:v2ray
+
+  v2-server:
+    container_name: v2-server
+    image: v2ray/official
+    networks:
+      - v2ray
+    volumes:
+      - ./v2ray/lerignoux_v2ray_server.json:/etc/v2ray/config.json
+    restart: always
+
+networks:
+  v2:

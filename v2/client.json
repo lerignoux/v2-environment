@@ -1,0 +1,98 @@
+{
+    "log" : {
+      "loglevel": "warning",
+      "access": "/var/log/v2ray_access"
+    },
+    "dns": {
+      "servers": ["8.8.8.8", "8.8.4.4"]
+    },
+    "inbounds": [
+      {
+        "port": 6666,
+        "listen": "0.0.0.0",
+        "protocol": "socks",
+        "settings": {
+          "auth": "noauth",
+          "udp": true
+        },
+        "sniffing": {
+          "enabled": true,
+          "destOverride": ["http", "tls"]
+        }
+      }
+    ],
+    "outbounds": [
+      {
+        "protocol": "vmess",
+        "settings": {
+          "vnext": [{
+            "address": "<ReplaceMe-YourCloudFront/VPSAddress>",
+            "port": 443,
+            "users": [{
+              "id": "<ReplaceMe-YourClientId>",
+              "level": 1,
+              "security": "auto",
+              "alterId": 64
+            }]
+          }]
+        },
+        "mux": {
+          "enabled": true
+        },
+        "streamSettings": {
+          "network": "ws",
+          "wsSettings": {
+            "path": "/graphql",
+            "headers": {
+              "Host": "<ReplaceMe-YourCloudFront/VPSAddress>"
+            }
+          },
+          "security": "tls"
+        }
+      },
+      {
+        "protocol": "freedom",
+        "tag": "direct",
+        "settings": {}
+      }
+    ],
+    "routing": {
+      "strategy": "rules",
+      "settings": {
+        "rules": [
+          {
+            "type": "field",
+            "ip": [
+              "0.0.0.0/8",
+              "10.0.0.0/8",
+              "100.64.0.0/10",
+              "127.0.0.0/8",
+              "169.254.0.0/16",
+              "172.16.0.0/12",
+              "192.0.0.0/24",
+              "192.0.2.0/24",
+              "192.168.0.0/16",
+              "198.18.0.0/15",
+              "198.51.100.0/24",
+              "203.0.113.0/24",
+              "::1/128",
+              "fc00::/7",
+              "fe80::/10"
+            ],
+            "outboundTag": "direct"
+          },
+          {
+            "type": "field",
+            "domain": ["geosite:cn"],
+            "outboundTag": "direct"
+          },
+          {
+            "type": "field",
+            "ip": ["geoip:cn", "geoip:private"],
+            "outboundTag": "direct"
+          }
+        ]
+      }
+    }
+  }
+  
